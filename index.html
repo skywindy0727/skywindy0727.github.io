@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>澳門葡式風情之旅 + 連環畫</title>
+    <title>澳門葡式風情之旅</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Sans+TC:wght@400;700&family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
-        /* --- 主題樣式 --- */
+        /* --- 葡式風情主題樣式 --- */
         :root {
-            --portugal-blue: #005DC7;
+            --portugal-blue: #005DC7; /* 經典葡國藍 */
+            --portugal-white: #FFFFFF;
             --tile-bg: #F0F4F8;
-            --comic-border: 3px solid #000;
-            --comic-shadow: 4px 4px 0px #000;
         }
 
         body { 
@@ -29,53 +28,55 @@
             color: #333;
         }
 
-        h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
-        .comic-font { font-family: 'Bangers', cursive; letter-spacing: 1px; }
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
 
-        /* 葡式磁磚背景 */
+        /* 模擬葡式磁磚紋理 */
         .bg-azulejos {
             background-color: var(--portugal-blue);
-            background-image: radial-gradient(circle at 100% 150%, var(--portugal-blue) 24%, white 25%, white 28%, var(--portugal-blue) 29%, var(--portugal-blue) 36%, white 36%, white 40%, transparent 40%, transparent), radial-gradient(circle at 0 150%, var(--portugal-blue) 24%, white 25%, white 28%, var(--portugal-blue) 29%, var(--portugal-blue) 36%, white 36%, white 40%, transparent 40%, transparent), radial-gradient(circle at 50% 100%, white 10%, var(--portugal-blue) 11%, var(--portugal-blue) 23%, white 24%, white 30%, var(--portugal-blue) 31%, var(--portugal-blue) 43%, white 44%, white 50%, var(--portugal-blue) 51%, var(--portugal-blue) 63%, white 64%, white 71%, transparent 71%, transparent), radial-gradient(circle at 100% 50%, white 5%, var(--portugal-blue) 6%, var(--portugal-blue) 15%, white 16%, white 20%, var(--portugal-blue) 21%, var(--portugal-blue) 30%, white 31%, white 35%, var(--portugal-blue) 36%, var(--portugal-blue) 45%, white 46%, white 49%, transparent 50%, transparent), radial-gradient(circle at 0 50%, white 5%, var(--portugal-blue) 6%, var(--portugal-blue) 15%, white 16%, white 20%, var(--portugal-blue) 21%, var(--portugal-blue) 30%, white 31%, white 35%, var(--portugal-blue) 36%, var(--portugal-blue) 45%, white 46%, white 49%, transparent 50%, transparent);
+            background-image: 
+                radial-gradient(circle at 100% 150%, var(--portugal-blue) 24%, white 25%, white 28%, var(--portugal-blue) 29%, var(--portugal-blue) 36%, white 36%, white 40%, transparent 40%, transparent),
+                radial-gradient(circle at 0    150%, var(--portugal-blue) 24%, white 25%, white 28%, var(--portugal-blue) 29%, var(--portugal-blue) 36%, white 36%, white 40%, transparent 40%, transparent),
+                radial-gradient(circle at 50%  100%, white 10%, var(--portugal-blue) 11%, var(--portugal-blue) 23%, white 24%, white 30%, var(--portugal-blue) 31%, var(--portugal-blue) 43%, white 44%, white 50%, var(--portugal-blue) 51%, var(--portugal-blue) 63%, white 64%, white 71%, transparent 71%, transparent),
+                radial-gradient(circle at 100% 50%, white 5%, var(--portugal-blue) 6%, var(--portugal-blue) 15%, white 16%, white 20%, var(--portugal-blue) 21%, var(--portugal-blue) 30%, white 31%, white 35%, var(--portugal-blue) 36%, var(--portugal-blue) 45%, white 46%, white 49%, transparent 50%, transparent),
+                radial-gradient(circle at 0    50%, white 5%, var(--portugal-blue) 6%, var(--portugal-blue) 15%, white 16%, white 20%, var(--portugal-blue) 21%, var(--portugal-blue) 30%, white 31%, white 35%, var(--portugal-blue) 36%, var(--portugal-blue) 45%, white 46%, white 49%, transparent 50%, transparent);
             background-size: 50px 50px;
             background-blend-mode: soft-light;
         }
 
-        /* 一般卡片樣式 */
-        .card-portugal { border-left: 5px solid var(--portugal-blue); transition: all 0.2s ease; }
-        .card-portugal:active { transform: scale(0.98); }
-
-        /* --- 連環畫專屬樣式 (Comic Style) --- */
-        .comic-panel {
-            border: var(--comic-border);
-            box-shadow: var(--comic-shadow);
-            background: #fff;
-            transition: transform 0.2s;
+        /* 卡片樣式 */
+        .card-portugal {
+            border-left: 5px solid var(--portugal-blue);
+            transition: all 0.2s ease;
         }
-        .comic-panel:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000;}
-        .comic-caption-box {
-            background: #fff;
-            border-top: var(--comic-border);
-            padding: 8px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .comic-img-filter { filter: sepia(0.3) contrast(1.1); transition: filter 0.3s;}
-        .comic-panel:hover .comic-img-filter { filter: sepia(0) contrast(1); }
-        .comic-day-badge {
-            position: absolute; top: -10px; left: -10px;
-            background: #FFD700; border: 2px solid #000;
-            padding: 2px 8px; font-weight: bold; transform: rotate(-5deg);
-            box-shadow: 2px 2px 0 #000; z-index: 10;
+        .card-portugal:active {
+            transform: scale(0.98);
+            background-color: #f8fafc;
         }
 
-        /* 其他樣式 */
-        .timeline-line { position: absolute; left: 24px; top: 45px; bottom: -20px; width: 3px; background: repeating-linear-gradient(to bottom, #cbd5e1 0, #cbd5e1 6px, transparent 6px, transparent 12px); z-index: 0; }
+        /* 時間軸線條 */
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 45px;
+            bottom: -20px;
+            width: 3px;
+            background: repeating-linear-gradient(to bottom, #cbd5e1 0, #cbd5e1 6px, transparent 6px, transparent 12px);
+            z-index: 0;
+        }
         .last-item .timeline-line { display: none; }
+
+        /* 隱藏滾動條 */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Modal 動畫 */
         .modal { transition: opacity 0.3s ease, transform 0.3s ease; }
         .modal.hidden { pointer-events: none; opacity: 0; transform: scale(0.95); }
         .modal.flex { pointer-events: auto; opacity: 1; transform: scale(1); }
+        
+        /* 地圖高度 */
         #map { height: calc(100vh - 180px); width: 100%; border-radius: 12px; border: 4px solid white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
@@ -84,8 +85,8 @@
     <header class="bg-azulejos text-white p-6 sticky top-0 z-50 shadow-lg rounded-b-[2rem] border-b-4 border-yellow-400">
         <div class="flex justify-between items-start mb-4">
             <div>
-                <p class="text-xs uppercase tracking-widest opacity-90 mb-1">DECEMBER 13-15</p>
-                <h1 class="text-3xl font-bold tracking-wide leading-tight">Macau<br>Adventure</h1>
+                <p class="text-xs uppercase tracking-widest opacity-90 mb-1" id="current-date">DECEMBER 13</p>
+                <h1 class="text-3xl font-bold tracking-wide leading-tight">Macau<br>Trip</h1>
             </div>
             <div class="flex flex-col items-end gap-2">
                 <div class="text-right bg-white/10 backdrop-blur-sm px-3 py-1 rounded-lg">
@@ -97,6 +98,9 @@
                 </button>
             </div>
         </div>
+        <div class="flex items-center text-sm font-medium space-x-4 mt-2">
+            <span class="flex items-center"><i class="fas fa-map-marker-alt mr-1 text-yellow-400"></i> 澳門半島 & 路氹</span>
+        </div>
     </header>
 
     <main class="p-4 relative max-w-md mx-auto">
@@ -104,7 +108,10 @@
         <div id="view-day1" class="tab-view block">
             <div class="flex items-center mb-6 mt-2">
                 <span class="text-4xl font-bold text-blue-800 mr-2 serif-font">01</span>
-                <div><h2 class="text-lg font-bold text-gray-800">歷史城區漫步</h2><p class="text-xs text-gray-500">12月13日 • 住宿：十六浦索菲特</p></div>
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800">歷史城區漫步</h2>
+                    <p class="text-xs text-gray-500">12月13日 (五) • 住宿：十六浦索菲特</p>
+                </div>
             </div>
             <div id="timeline-day1"></div>
         </div>
@@ -112,7 +119,10 @@
         <div id="view-day2" class="tab-view hidden">
             <div class="flex items-center mb-6 mt-2">
                 <span class="text-4xl font-bold text-blue-800 mr-2 serif-font">02</span>
-                <div><h2 class="text-lg font-bold text-gray-800">奢華路氹體驗</h2><p class="text-xs text-gray-500">12月14日 • 住宿：澳門瑞吉酒店</p></div>
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800">奢華路氹體驗</h2>
+                    <p class="text-xs text-gray-500">12月14日 (六) • 住宿：澳門瑞吉酒店</p>
+                </div>
             </div>
             <div id="timeline-day2"></div>
         </div>
@@ -120,41 +130,51 @@
         <div id="view-day3" class="tab-view hidden">
             <div class="flex items-center mb-6 mt-2">
                 <span class="text-4xl font-bold text-blue-800 mr-2 serif-font">03</span>
-                <div><h2 class="text-lg font-bold text-gray-800">悠閒購物賦歸</h2><p class="text-xs text-gray-500">12月15日 • 返程</p></div>
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800">悠閒購物賦歸</h2>
+                    <p class="text-xs text-gray-500">12月15日 (日) • 返程</p>
+                </div>
             </div>
             <div id="timeline-day3"></div>
+        </div>
+
+        <div id="view-illustration" class="tab-view hidden">
+            <h2 class="text-xl font-bold text-blue-800 mb-4 ml-2 serif-font">行程手繪地圖</h2>
+            <div class="bg-white p-2 rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
+                <img src="Gemini_Generated_Image_ffkb37ffkb37ffkb.jpg" alt="澳門3天2夜手繪行程" class="w-full h-auto rounded-lg object-cover">
+                <div class="p-3 text-center">
+                    <p class="text-sm font-bold text-blue-900">Macau Trip Highlights</p>
+                    <p class="text-xs text-gray-500 mt-1">Day 1 ~ Day 3 全程精華概覽</p>
+                </div>
+            </div>
         </div>
 
         <div id="view-map" class="tab-view hidden">
             <h2 class="text-xl font-bold text-blue-800 mb-4 ml-2 serif-font">總行程地圖</h2>
             <div id="map"></div>
         </div>
-
-        <div id="view-comic" class="tab-view hidden px-2">
-            <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold text-blue-900 comic-font tracking-wider">THE MACAU COMIC</h2>
-                <p class="text-xs text-gray-500 serif-font">旅程精華 • 連環畫回顧</p>
-            </div>
-            <div id="comic-container" class="space-y-8 pb-4">
-                </div>
-        </div>
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-8px_30px_rgba(0,0,0,0.1)] py-2 px-4 flex justify-between items-center z-40 text-gray-400 rounded-t-3xl border-t-2 border-gray-200 max-w-md mx-auto">
-        <button onclick="switchTab('day1')" class="nav-btn text-blue-700 flex flex-col items-center w-1/5" data-target="day1">
-            <i class="fas fa-archway text-lg mb-1"></i><span class="text-[9px] font-bold">Day 1</span>
+    <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-8px_30px_rgba(0,0,0,0.1)] py-3 px-4 flex justify-between items-center z-40 text-gray-400 rounded-t-3xl border-t border-gray-100 max-w-md mx-auto">
+        <button onclick="switchTab('day1')" class="nav-btn text-blue-700 flex flex-col items-center transform transition active:scale-90" data-target="day1">
+            <i class="fas fa-archway text-lg mb-1"></i>
+            <span class="text-[9px] font-bold">Day 1</span>
         </button>
-        <button onclick="switchTab('day2')" class="nav-btn flex flex-col items-center w-1/5" data-target="day2">
-            <i class="fas fa-star text-lg mb-1"></i><span class="text-[9px] font-bold">Day 2</span>
+        <button onclick="switchTab('day2')" class="nav-btn flex flex-col items-center transform transition active:scale-90" data-target="day2">
+            <i class="fas fa-star text-lg mb-1"></i>
+            <span class="text-[9px] font-bold">Day 2</span>
         </button>
-        <button onclick="switchTab('day3')" class="nav-btn flex flex-col items-center w-1/5" data-target="day3">
-            <i class="fas fa-plane text-lg mb-1"></i><span class="text-[9px] font-bold">Day 3</span>
+        <button onclick="switchTab('day3')" class="nav-btn flex flex-col items-center transform transition active:scale-90" data-target="day3">
+            <i class="fas fa-plane text-lg mb-1"></i>
+            <span class="text-[9px] font-bold">Day 3</span>
         </button>
-        <button onclick="switchTab('comic')" class="nav-btn flex flex-col items-center w-1/5" data-target="comic">
-            <i class="fas fa-book-open text-lg mb-1"></i><span class="text-[9px] font-bold">連環畫</span>
+        <button onclick="switchTab('illustration')" class="nav-btn flex flex-col items-center transform transition active:scale-90" data-target="illustration">
+            <i class="fas fa-palette text-lg mb-1"></i>
+            <span class="text-[9px] font-bold">插畫</span>
         </button>
-        <button onclick="switchTab('map')" class="nav-btn flex flex-col items-center w-1/5" data-target="map">
-            <i class="fas fa-map-marked-alt text-lg mb-1"></i><span class="text-[9px] font-bold">地圖</span>
+        <button onclick="switchTab('map')" class="nav-btn flex flex-col items-center transform transition active:scale-90" data-target="map">
+            <i class="fas fa-map-marked-alt text-lg mb-1"></i>
+            <span class="text-[9px] font-bold">Map</span>
         </button>
     </nav>
 
@@ -172,15 +192,30 @@
             <div class="p-6 overflow-y-auto no-scrollbar flex-grow">
                 <div id="modal-highlight" class="hidden bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4 flex items-start">
                     <i class="fas fa-ticket-alt text-blue-600 mt-1 mr-3"></i>
-                    <div><p class="text-xs text-blue-500 font-bold uppercase">Booking / Info</p><div id="modal-highlight-content" class="text-sm font-bold text-gray-800"></div></div>
+                    <div>
+                        <p class="text-xs text-blue-500 font-bold uppercase">Booking / Info</p>
+                        <div id="modal-highlight-content" class="text-sm font-bold text-gray-800"></div>
+                    </div>
                 </div>
-                <div class="flex items-center mb-4 text-sm text-gray-600"><i class="far fa-clock w-5 text-center mr-2 text-blue-600"></i><span id="modal-hours"></span></div>
-                <div class="flex items-center mb-4 text-sm text-gray-600"><i class="fas fa-map-pin w-5 text-center mr-2 text-red-500"></i><span id="modal-address"></span></div>
-                <div class="prose prose-sm text-gray-600 leading-relaxed"><p id="modal-desc"></p></div>
-                <div id="modal-veg" class="hidden mt-4 p-3 bg-green-50 rounded-lg border border-green-100 text-xs text-green-800"><i class="fas fa-seedling mr-1"></i> <strong>素食提示：</strong> <span id="modal-veg-content"></span></div>
+                <div class="flex items-center mb-4 text-sm text-gray-600">
+                    <i class="far fa-clock w-5 text-center mr-2 text-blue-600"></i>
+                    <span id="modal-hours">營業時間載入中...</span>
+                </div>
+                <div class="flex items-center mb-4 text-sm text-gray-600">
+                    <i class="fas fa-map-pin w-5 text-center mr-2 text-red-500"></i>
+                    <span id="modal-address">位置資訊</span>
+                </div>
+                <div class="prose prose-sm text-gray-600 leading-relaxed">
+                    <p id="modal-desc">內容...</p>
+                </div>
+                <div id="modal-veg" class="hidden mt-4 p-3 bg-green-50 rounded-lg border border-green-100 text-xs text-green-800">
+                    <i class="fas fa-seedling mr-1"></i> <strong>素食提示：</strong> <span id="modal-veg-content"></span>
+                </div>
             </div>
             <div class="p-4 border-t border-gray-100 bg-gray-50">
-                <a id="modal-map-btn" href="#" target="_blank" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl font-bold shadow-lg transition transform active:scale-95"><i class="fas fa-location-arrow mr-2"></i> 開啟導航</a>
+                <a id="modal-map-btn" href="#" target="_blank" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl font-bold shadow-lg transition transform active:scale-95">
+                    <i class="fas fa-location-arrow mr-2"></i> 開啟導航
+                </a>
             </div>
         </div>
     </div>
@@ -190,10 +225,26 @@
             <button onclick="closeTipsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
             <h3 class="text-2xl font-bold text-blue-900 mb-4 serif-font"><i class="fas fa-book-open mr-2"></i>旅行貼士</h3>
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 no-scrollbar">
-                <div class="flex items-start"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3 flex-shrink-0"><i class="fas fa-passport"></i></div><div><h4 class="font-bold text-sm">入境 & 證件</h4><p class="text-xs text-gray-500 mt-1">台灣護照免簽證可停留30天。</p></div></div>
-                <div class="flex items-start"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3 flex-shrink-0"><i class="fas fa-coins"></i></div><div><h4 class="font-bold text-sm">貨幣 (MOP/HKD)</h4><p class="text-xs text-gray-500 mt-1">澳門幣與港幣通用 (1:1)。</p></div></div>
-                <div class="flex items-start"><div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3 flex-shrink-0"><i class="fas fa-plug"></i></div><div><h4 class="font-bold text-sm">電壓 & 插座</h4><p class="text-xs text-gray-500 mt-1">220V，英式三腳方插 (G型)。</p></div></div>
-                <div class="flex items-start"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-800 mr-3 flex-shrink-0"><i class="fas fa-leaf"></i></div><div><h4 class="font-bold text-sm">素食點餐</h4><p class="text-xs text-gray-500 mt-1">粵語：「走肉、走五辛」。</p></div></div>
+                <div class="flex items-start">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3 flex-shrink-0"><i class="fas fa-passport"></i></div>
+                    <div><h4 class="font-bold text-sm">入境 & 證件</h4><p class="text-xs text-gray-500 mt-1">台灣護照免簽證可停留30天。建議攜帶護照影本備用。</p></div>
+                </div>
+                <div class="flex items-start">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3 flex-shrink-0"><i class="fas fa-coins"></i></div>
+                    <div><h4 class="font-bold text-sm">貨幣 (MOP/HKD)</h4><p class="text-xs text-gray-500 mt-1">澳門幣(MOP)與港幣(HKD)通用 (1:1)。建議準備小額港幣。</p></div>
+                </div>
+                <div class="flex items-start">
+                    <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mr-3 flex-shrink-0"><i class="fas fa-plug"></i></div>
+                    <div><h4 class="font-bold text-sm">電壓 & 插座</h4><p class="text-xs text-gray-500 mt-1">220V，插座為英式三腳方插 (G型)。需攜帶轉接頭。</p></div>
+                </div>
+                <div class="flex items-start">
+                    <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-3 flex-shrink-0"><i class="fas fa-taxi"></i></div>
+                    <div><h4 class="font-bold text-sm">交通提醒</h4><p class="text-xs text-gray-500 mt-1">右駕左行 (與台灣相反)。</p></div>
+                </div>
+                <div class="flex items-start">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-800 mr-3 flex-shrink-0"><i class="fas fa-leaf"></i></div>
+                    <div><h4 class="font-bold text-sm">素食點餐葡文/粵語</h4><p class="text-xs text-gray-500 mt-1">"我吃素" (Sou Vegetariano) / "不要肉" (Sem Carne) / "走蔥蒜"</p></div>
+                </div>
             </div>
             <button onclick="closeTipsModal()" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold mt-6">我知道了</button>
         </div>
@@ -202,23 +253,26 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // --- 1. 資料數據 (更新了圖片 Placeholder 的文字以符合連環畫主題) ---
+        // --- 1. 資料數據 ---
         const scheduleData = {
             day1: [
-                { time: "09:30", type: "flight", title: "澳門航空 NX631", desc: "TPE ✈️ MFM", icon: "fa-plane-departure", modal: { tag: "Flight", title: "NX631 啟程", desc: "期待已久的澳門之旅正式開始！", hours: "09:30 - 11:30", address: "桃園機場 T1", highlight: "電子機票號碼：675-xxxxxxx", img: "https://placehold.co/600x400/005DC7/FFF?text=Takeoff+Adventure", link: "#" } },
-                { time: "12:00", type: "hotel", title: "十六浦索菲特", desc: "寄放行李 / 辦理入住", icon: "fa-hotel", modal: { tag: "Hotel", title: "抵達索菲特", desc: "位於內港歷史區，融合法式與澳門風情。", hours: "Check-in: 15:00", address: "澳門內港", highlight: "預定代號：PMZSBJQK", img: "https://placehold.co/600x400/D4AF37/FFF?text=Sofitel+Ponte+16", link: "https://goo.gl/maps/sofitel" } },
-                { time: "13:00", type: "food", title: "祥記麪家", desc: "米其林推薦：蝦籽撈麵", icon: "fa-utensils", modal: { tag: "Lunch", title: "祥記竹昇麵", desc: "五十年老字號，爽彈的蝦籽撈麵令人難忘。", hours: "11:30 - 00:00", address: "福隆新街", veg: "可點淨麵、灼菜(走蠔油)。", img: "https://placehold.co/600x400/e53e3e/FFF?text=Classic+Noodles", link: "https://goo.gl/maps/xiangji" } },
-                { time: "14:30", type: "sight", title: "大三巴牌坊", desc: "世界遺產歷史城區", icon: "fa-archway", modal: { tag: "Must Visit", title: "大三巴牌坊", desc: "澳門最經典的地標，聖保祿教堂的前壁遺跡。", hours: "全天開放", address: "大三巴斜巷", img: "https://placehold.co/600x400/4a5568/FFF?text=Ruins+of+St.Paul+Iconic+View", link: "https://goo.gl/maps/ruins" } },
-                { time: "19:00", type: "food", title: "JW萬豪 名廚都匯", desc: "豪華自助晚餐", icon: "fa-wine-glass", modal: { tag: "Dinner", title: "名廚都匯盛宴", desc: "在JW萬豪享受豐盛的國際美食自助餐。", hours: "18:00 - 21:30", address: "JW萬豪酒店", highlight: "已訂位：19:00", veg: "有素食專區。", img: "https://placehold.co/600x400/2d3748/FFF?text=Grand+Buffet+Dinner", link: "https://goo.gl/maps/jwmarriott" } },
+                { time: "09:30", type: "flight", title: "澳門航空 NX631", desc: "TPE ✈️ MFM", icon: "fa-plane-departure", modal: { tag: "Flight", title: "NX631 台北-澳門", desc: "請於起飛前 2 小時抵達桃園機場第一航廈櫃台辦理登機。飛行時間約 1小時50分，機上提供餐點。", hours: "起飛 09:30 / 抵達 11:30", address: "桃園國際機場 T1 -> 澳門國際機場", highlight: "電子機票號碼：675-xxxxxxx", img: "https://placehold.co/600x400/005DC7/FFF?text=Air+Macau+NX631", link: "https://www.airmacau.com.mo/" } },
+                { time: "12:00", type: "hotel", title: "十六浦索菲特", desc: "寄放行李 / 辦理入住", icon: "fa-hotel", modal: { tag: "Hotel", title: "澳門十六浦索菲特", desc: "位於內港歷史區的五星級酒店，融合法式優雅與澳門風情。請先至前台寄放行李，下午3點後可進房。", hours: "Check-in: 15:00 / Out: 11:00", address: "澳門巴素打爾古街 (內港)", highlight: "預定代號：PMZSBJQK (高級房)", img: "https://placehold.co/600x400/D4AF37/FFF?text=Sofitel+Macau", link: "https://goo.gl/maps/sofitel" } },
+                { time: "13:00", type: "food", title: "祥記麪家", desc: "米其林推薦：蝦籽撈麵", icon: "fa-utensils", modal: { tag: "Lunch", title: "祥記麪家", desc: "開業超過50年的老字號，以竹昇打麵聞名。招牌蝦籽撈麵麵條爽彈，充滿鹹香。", hours: "11:30 - 00:00", address: "澳門福隆新街68號", veg: "素食可點：薑蔥撈麵(走蔥)、淨麵、灼菜(走蠔油)。", highlight: "推薦：招牌蝦籽撈麵、炸鯪魚球", img: "https://placehold.co/600x400/e53e3e/FFF?text=Noodle+Shop", link: "https://goo.gl/maps/xiangji" } },
+                { time: "14:30", type: "sight", title: "大三巴牌坊", desc: "世界遺產歷史城區", icon: "fa-archway", modal: { tag: "Must Visit", title: "大三巴牌坊", desc: "聖保祿學院天主之母教堂遺址，澳門最具代表性的地標。建議順道參觀右側的哪吒廟與戀愛巷。", hours: "立面全天開放 / 天主教藝術博物館 09:00-18:00", address: "澳門大三巴斜巷", highlight: "Tip: 牌坊後方有鐵梯可登高瀏覽。", img: "https://placehold.co/600x400/4a5568/FFF?text=Ruins+of+St.Paul", link: "https://goo.gl/maps/ruins" } },
+                { time: "19:00", type: "food", title: "JW萬豪 名廚都匯", desc: "豪華自助晚餐", icon: "fa-wine-glass", modal: { tag: "Dinner", title: "名廚都匯 Urban Kitchen", desc: "澳門評價極高的自助餐，分為六個美食專區，海鮮與甜點特別出色。素食者有專門的沙拉吧與熱食區。", hours: "晚餐時段 18:00 - 21:30", address: "澳門JW萬豪酒店 1樓", highlight: "已訂位：19:00 (1位)", veg: "提供豐富沙拉、水果、中式素熱炒、麵檔可客製素食。", img: "https://placehold.co/600x400/2d3748/FFF?text=JW+Marriott+Buffet", link: "https://goo.gl/maps/jwmarriott" } },
             ],
             day2: [
-                { time: "12:00", type: "food", title: "小飛象葡國餐", desc: "經典葡式料理", icon: "fa-utensils", modal: { tag: "Lunch", title: "葡國菜體驗", desc: "在氹仔品嚐道地的改良式葡國料理。", hours: "11:45 - 23:00", address: "氹仔地堡街", veg: "可客製素食。", img: "https://placehold.co/600x400/ed8936/FFF?text=Portuguese+Feast", link: "https://goo.gl/maps/dumbo" } },
-                { time: "14:30", type: "sight", title: "龍環葡韻", desc: "葡式住宅博物館", icon: "fa-home", modal: { tag: "Culture", title: "龍環葡韻漫步", desc: "薄荷綠的葡式別墅群，充滿浪漫氣息。", hours: "10:00 - 19:00", address: "氹仔海邊馬路", img: "https://placehold.co/600x400/38a169/FFF?text=Macanese+Houses", link: "https://goo.gl/maps/taipahouses" } },
-                { time: "17:00", type: "hotel", title: "澳門瑞吉酒店", desc: "Check-in & 管家服務", icon: "fa-bed", modal: { tag: "Luxury Hotel", title: "入住瑞吉酒店", desc: "體驗極致奢華的管家服務與路氹景觀。", hours: "Check-in: 15:00", address: "路氹連貫公路", highlight: "預定代號：81555809", img: "https://placehold.co/600x400/2b6cb0/FFF?text=St.Regis+Luxury", link: "https://goo.gl/maps/stregis" } },
+                { time: "10:30", type: "transport", title: "移動至路氹", desc: "前往瑞吉酒店", icon: "fa-taxi", modal: { tag: "Transport", title: "前往路氹金光大道", desc: "從十六浦退房後，可搭乘計程車(約MOP 80-100)或搭乘酒店免費穿梭巴士至港澳碼頭轉車。", hours: "-", address: "目的地：澳門瑞吉酒店", highlight: "計程車程約 20 分鐘", img: "https://placehold.co/600x400/1a202c/FFF?text=Taxi+To+Cotai", link: "https://goo.gl/maps/stregis" } },
+                { time: "12:00", type: "food", title: "小飛象葡國餐", desc: "經典葡式料理", icon: "fa-utensils", modal: { tag: "Lunch", title: "小飛象葡國餐廳", desc: "位於氹仔官也街附近的知名葡國菜，環境寬敞，適合遊客。口味經過改良，較符合亞洲人胃口。", hours: "11:45 - 23:00", address: "氹仔地堡街喜來登廣場地下", veg: "素食選項：葡國什菜煲(需去肉)、清炒時蔬、沙律。", highlight: "推薦：葡國雞、馬介休餅", img: "https://placehold.co/600x400/ed8936/FFF?text=Portuguese+Food", link: "https://goo.gl/maps/dumbo" } },
+                { time: "14:30", type: "sight", title: "龍環葡韻", desc: "葡式住宅博物館", icon: "fa-home", modal: { tag: "Culture", title: "龍環葡韻", desc: "「龍環」是氹仔舊稱，「葡韻」指葡萄牙建築風韻。五幢翠綠色的小型別墅，非常適合拍照。", hours: "10:00 - 19:00 (週一休館)", address: "氹仔海邊馬路", highlight: "旁邊是濕地公園，風景優美。", img: "https://placehold.co/600x400/38a169/FFF?text=Taipa+Houses", link: "https://goo.gl/maps/taipahouses" } },
+                { time: "17:00", type: "hotel", title: "澳門瑞吉酒店", desc: "Check-in & 管家服務", icon: "fa-bed", modal: { tag: "Luxury Hotel", title: "澳門瑞吉酒店", desc: "以標誌性的管家服務聞名。入住後可要求管家提供咖啡或茶服務 (Beverage Service) 及開箱整理行李。", hours: "Check-in: 15:00", address: "路氹連貫公路 (倫敦人旁)", highlight: "預定代號：81555809 (1 Deluxe King)", img: "https://placehold.co/600x400/2b6cb0/FFF?text=St.Regis+Macao", link: "https://goo.gl/maps/stregis" } },
+                { time: "19:30", type: "food", title: "瑞吉 The Manor", desc: "雅舍餐廳精緻晚餐", icon: "fa-glass-cheers", modal: { tag: "Fine Dining", title: "The Manor 雅舍", desc: "專注於優質食材的現代歐式料理，環境高雅。建議提前請管家確認素食菜單 (Vegetarian Menu)。", hours: "18:00 - 23:00", address: "瑞吉酒店 1樓", veg: "提供精緻素食套餐 (需預訂)。", highlight: "重點：頂級牛排、海鮮塔", img: "https://placehold.co/600x400/744210/FFF?text=The+Manor", link: "https://goo.gl/maps/themanor" } },
             ],
             day3: [
-                { time: "13:00", type: "food", title: "Passion by GD", desc: "法式輕食午餐", icon: "fa-bread-slice", modal: { tag: "Light Meal", title: "法式輕食時光", desc: "在銀河享受精緻的法式麵包與甜點。", hours: "10:00 - 22:00", address: "澳門銀河", veg: "有素食三明治/沙拉。", img: "https://placehold.co/600x400/d69e2e/FFF?text=French+Bakery+Cafe", link: "https://goo.gl/maps/galaxy" } },
-                { time: "17:30", type: "flight", title: "澳門航空 NX618", desc: "MFM ✈️ TPE", icon: "fa-plane-departure", modal: { tag: "Return Flight", title: "滿載而歸", desc: "結束美好的澳門之旅，搭機返台。", hours: "17:30 起飛", address: "澳門國際機場", img: "https://placehold.co/600x400/005DC7/FFF?text=Journey+Home", link: "https://www.macau-airport.com/" } }
+                { time: "11:00", type: "relax", title: "瑞吉悠閒時光", desc: "享受早餐與設施", icon: "fa-coffee", modal: { tag: "Relax", title: "瑞吉健身中心 / 泳池", desc: "位於8樓的泳池可眺望路氹景色。把握最後時光享受五星級設施。", hours: "泳池 07:00 - 20:00", address: "瑞吉酒店 8樓", highlight: "退房時間：12:00", img: "https://placehold.co/600x400/3182ce/FFF?text=St.Regis+Pool", link: "" } },
+                { time: "13:00", type: "food", title: "Passion by GD", desc: "法式輕食午餐", icon: "fa-bread-slice", modal: { tag: "Light Meal", title: "Passion by Gérard Dubois", desc: "色彩繽紛的法式麵包店，提供正宗的三明治、沙拉和精緻甜點。非常適合登機前的簡單午餐。", hours: "10:00 - 22:00", address: "澳門銀河 / 星際酒店皆有分店", veg: "自選沙拉吧、素食三明治、蛋奶素甜點。", highlight: "必吃：熱情果馬卡龍、酸種麵包", img: "https://placehold.co/600x400/d69e2e/FFF?text=Passion+Bakery", link: "https://goo.gl/maps/galaxy" } },
+                { time: "17:30", type: "flight", title: "澳門航空 NX618", desc: "MFM ✈️ TPE", icon: "fa-plane-departure", modal: { tag: "Return Flight", title: "NX618 澳門-台北", desc: "請預留時間逛機場免稅店。平安賦歸！", hours: "起飛 17:30 / 抵達 19:15", address: "澳門國際機場", highlight: "記得再次確認行李無違禁品", img: "https://placehold.co/600x400/005DC7/FFF?text=Return+NX618", link: "https://www.macau-airport.com/" } }
             ]
         };
 
@@ -228,83 +282,66 @@
             { lat: 22.197, lng: 113.540, title: "大三巴牌坊", day: "D1" },
             { lat: 22.149, lng: 113.553, title: "JW萬豪", day: "D1" },
             { lat: 22.146, lng: 113.556, title: "澳門瑞吉", day: "D2" },
-            { lat: 22.153, lng: 113.556, title: "小飛象", day: "D2" },
+            { lat: 22.153, lng: 113.556, title: "小飛象葡國餐", day: "D2" },
             { lat: 22.151, lng: 113.554, title: "龍環葡韻", day: "D2" },
             { lat: 22.158, lng: 113.565, title: "澳門機場", day: "D3" }
         ];
 
         // --- 2. 渲染邏輯 ---
+        
         function renderTimeline(dayId, data) {
             const container = document.getElementById(`timeline-${dayId}`);
             let html = '';
+            
             data.forEach((item, index) => {
                 const isLast = index === data.length - 1;
                 const modalStr = encodeURIComponent(JSON.stringify(item.modal));
+
                 html += `
                     <div class="flex relative mb-8 ${isLast ? 'last-item' : ''}" onclick="openModal('${modalStr}')">
-                        <div class="w-14 text-right pr-3 pt-2 flex-shrink-0 z-10"><span class="text-sm font-bold text-gray-500 font-mono">${item.time}</span></div>
+                        <div class="w-14 text-right pr-3 pt-2 flex-shrink-0 z-10">
+                            <span class="text-sm font-bold text-gray-500 font-mono">${item.time}</span>
+                        </div>
+                        
                         <div class="relative flex flex-col items-center mr-4 z-10">
-                            <div class="w-10 h-10 rounded-full bg-white border-2 border-blue-500 shadow-md flex items-center justify-center text-blue-600 z-20"><i class="fas ${item.icon}"></i></div>
+                            <div class="w-10 h-10 rounded-full bg-white border-2 border-blue-500 shadow-md flex items-center justify-center text-blue-600 z-20">
+                                <i class="fas ${item.icon}"></i>
+                            </div>
                             <div class="timeline-line"></div>
                         </div>
+
                         <div class="card-portugal bg-white p-4 rounded-r-xl rounded-bl-xl shadow-sm flex-grow cursor-pointer relative overflow-hidden group">
-                            <div class="absolute right-0 top-0 bottom-0 w-16 opacity-10 group-hover:opacity-20 transition"><img src="${item.modal.img}" class="w-full h-full object-cover grayscale"></div>
-                            <div class="relative z-10"><h3 class="font-bold text-gray-800 text-lg mb-1 group-hover:text-blue-700 transition">${item.title}</h3><p class="text-xs text-gray-500 mb-2">${item.desc}</p><span class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100"><i class="fas fa-info-circle mr-1"></i>點擊查看詳情</span></div>
+                            <div class="absolute right-0 top-0 bottom-0 w-16 opacity-10 group-hover:opacity-20 transition">
+                                <img src="${item.modal.img}" class="w-full h-full object-cover grayscale">
+                            </div>
+                            
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-gray-800 text-lg mb-1 group-hover:text-blue-700 transition">${item.title}</h3>
+                                <p class="text-xs text-gray-500 mb-2">${item.desc}</p>
+                                <span class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100">
+                                    <i class="fas fa-info-circle mr-1"></i>點擊查看詳情
+                                </span>
+                            </div>
                         </div>
-                    </div>`;
-            });
-            container.innerHTML = html;
-        }
-
-        // 🔥 新增：渲染連環畫 (Comic Strip Renderer)
-        function renderComic() {
-            const container = document.getElementById('comic-container');
-            let html = '';
-            // 挑選重點行程製作成連環畫
-            const highlights = [
-                { day: "Day 1", ...scheduleData.day1[0] }, // 啟程
-                { day: "Day 1", ...scheduleData.day1[3] }, // 大三巴
-                { day: "Day 1", ...scheduleData.day1[4] }, // 晚餐
-                { day: "Day 2", ...scheduleData.day2[1] }, // 龍環葡韻
-                { day: "Day 2", ...scheduleData.day2[2] }, // 瑞吉酒店
-                { day: "Day 3", ...scheduleData.day3[1] }  // 返程
-            ];
-
-            highlights.forEach((item, index) => {
-                // 漫畫風格面板
-                html += `
-                <div class="comic-panel relative p-2 bg-white transform rotate-${index % 2 === 0 ? '1' : '-1'} hover:rotate-0 transition duration-300 z-10">
-                    <div class="comic-day-badge comic-font text-sm">${item.day}</div>
-                    <div class="relative border-2 border-black overflow-hidden h-48 bg-gray-200">
-                        <img src="${item.modal.img}" class="w-full h-full object-cover comic-img-filter">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
                     </div>
-                    <div class="comic-caption-box mt-2">
-                        <h3 class="text-lg font-bold text-blue-900 serif-font leading-tight">${item.modal.title}</h3>
-                        <p class="text-xs text-gray-600 comic-font mt-1 uppercase tracking-wider">${item.desc}</p>
-                    </div>
-                </div>
                 `;
-                // 加入連接箭頭 (除了最後一個)
-                if (index < highlights.length - 1) {
-                    html += `<div class="flex justify-center py-2"><i class="fas fa-arrow-down text-3xl text-yellow-500 animate-bounce" style="filter: drop-shadow(2px 2px 0 #000);"></i></div>`;
-                }
             });
             container.innerHTML = html;
         }
 
         // --- 3. 互動功能 ---
+
         document.addEventListener("DOMContentLoaded", () => {
             renderTimeline('day1', scheduleData.day1);
             renderTimeline('day2', scheduleData.day2);
             renderTimeline('day3', scheduleData.day3);
-            renderComic(); // 初始化連環畫
             fetchWeather();
         });
 
         function switchTab(targetId) {
             document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${targetId}`).classList.remove('hidden');
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -316,10 +353,10 @@
                     btn.classList.add('text-gray-400');
                 }
             });
+
             if (targetId === 'map') setTimeout(initMap, 200);
         }
 
-        // Modals (保持不變)
         function openModal(dataStr) {
             const data = JSON.parse(decodeURIComponent(dataStr));
             document.getElementById('modal-title').innerText = data.title;
@@ -332,18 +369,22 @@
             
             const highlightEl = document.getElementById('modal-highlight');
             if(data.highlight) { highlightEl.classList.remove('hidden'); document.getElementById('modal-highlight-content').innerText = data.highlight; } else { highlightEl.classList.add('hidden'); }
-            
+
             const vegEl = document.getElementById('modal-veg');
             if(data.veg) { vegEl.classList.remove('hidden'); document.getElementById('modal-veg-content').innerText = data.veg; } else { vegEl.classList.add('hidden'); }
 
             document.getElementById('info-modal').classList.remove('hidden');
             document.getElementById('info-modal').classList.add('flex');
         }
-        function closeModal() { document.getElementById('info-modal').classList.add('hidden'); document.getElementById('info-modal').classList.remove('flex'); }
+
+        function closeModal() {
+            document.getElementById('info-modal').classList.add('hidden');
+            document.getElementById('info-modal').classList.remove('flex');
+        }
+
         function openTipsModal() { document.getElementById('tips-modal').classList.remove('hidden'); document.getElementById('tips-modal').classList.add('flex'); }
         function closeTipsModal() { document.getElementById('tips-modal').classList.add('hidden'); document.getElementById('tips-modal').classList.remove('flex'); }
 
-        // 天氣
         async function fetchWeather() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=22.1987&longitude=113.5439&current_weather=true');
@@ -351,19 +392,25 @@
                 const temp = Math.round(data.current_weather.temperature);
                 document.getElementById('weather-temp').innerText = `${temp}°C`;
                 document.getElementById('weather-icon').innerHTML = temp > 20 ? '<i class="fas fa-sun text-yellow-400"></i>' : '<i class="fas fa-cloud text-gray-200"></i>';
-            } catch (e) { document.getElementById('weather-temp').innerText = "18°C"; }
+            } catch (e) {
+                document.getElementById('weather-temp').innerText = "18°C";
+            }
         }
 
-        // 地圖
         let map;
         function initMap() {
             if (map) return;
-            map = L.map('map').setView([22.16, 113.55], 12);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap', maxZoom: 20 }).addTo(map);
+            map = L.map('map').setView([22.17, 113.55], 13);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap',
+                maxZoom: 20
+            }).addTo(map);
+
             mapLocations.forEach((loc, index) => {
                 const iconHtml = `<div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 border-white shadow-lg font-mono">${index + 1}</div>`;
                 const customIcon = L.divIcon({ html: iconHtml, className: 'custom-div-icon', iconSize: [32, 32], iconAnchor: [16, 16] });
-                L.marker([loc.lat, loc.lng], {icon: customIcon}).addTo(map).bindPopup(`<b class="text-blue-800">${loc.title}</b><br><span class="text-xs text-gray-500">${loc.day}</span>`);
+                L.marker([loc.lat, loc.lng], {icon: customIcon}).addTo(map)
+                 .bindPopup(`<b class="text-blue-800">${loc.title}</b><br><span class="text-xs text-gray-500">${loc.day}</span>`);
             });
         }
     </script>
